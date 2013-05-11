@@ -14,6 +14,7 @@ public:
 	~Process()	{ }
 	std::string GetCommandLine();
 	std::string GetCommand();
+	void RunProcess();
 
 private:
 	std::string _cmd;
