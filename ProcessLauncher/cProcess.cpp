@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include <string>
+#include "Common.h"
 #include "cProcess.h"
+
 
 /**
   Creates a new Process object.
@@ -14,10 +16,11 @@
 Process::Process( std::string cmd, std::string cmdLine ){
 	this->_cmd = cmd;
 	this->_cmdLine = cmdLine;
+	this->_args = count_args( cmd );
 }
 
 /**
-  Returns the command used to create a new process.
+  Returns the command line used to create a new process.
  
   @return the module name for the process.
  */
@@ -35,22 +38,15 @@ std::string Process::GetCommand() {
 }
 
 void Process::RunProcess() {
-// Pointer to a null-terminated string that specifies the command line to execute.
-	std::wstring cmdLine = L"";
-	
-	// Pointer to a PROCESS_INFORMATION structure that receives identification information about the new process.
-	STARTUPINFO si;
-    PROCESS_INFORMATION pi;
+	std::wstring cmdLine = L"";	// Command line for the new process
+	STARTUPINFO si;				// Pointer to a STARTUPINFO struct ...
+    PROCESS_INFORMATION pi;		// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
+	LPCWSTR imgName = LPCWSTR( _cmd.c_str() );	// The process to run
+	LPWSTR proc_args = LPWSTR( (char)_args );	// The number of arguments
 
     ZeroMemory( &si, sizeof(si) );
     si.cb = sizeof(si);
     ZeroMemory( &pi, sizeof(pi) );
-
-	// The string can specify the full path and filename of the module to execute or it can specify a partial path and filename.		
-	LPCWSTR imgName = L"..\\debug\\launchtarget.exe";
-
-	// Command-line args
-	LPWSTR proc_args = L"4";
 	
 	BOOL proc = CreateProcess( 
 		imgName,			// LPCWSTR pszImageName, 
@@ -65,10 +61,10 @@ void Process::RunProcess() {
 		&pi 				// PROCESS_INFORMATION psiStartInfo
 	); 
 
-	auto ret = WaitForSingleObject( pi.hProcess, INFINITE );
+	unsigned long ret = WaitForSingleObject( pi.hProcess, INFINITE );
 
 	if( ret == WAIT_OBJECT_0)
-		cout << "Do something";
+		;	// TODO: Something
 
 	CloseHandle( pi.hProcess );
     CloseHandle( pi.hThread );

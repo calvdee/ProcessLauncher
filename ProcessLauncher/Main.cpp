@@ -6,8 +6,10 @@
 #include <map>
 #include <list>
 #include <memory>
+#include <sstream>
 #include "cProcess.h"
 #include "cProcessGroup.h"
+#include "Common.h"
 
 using namespace std;
 
@@ -21,6 +23,7 @@ void ParseFile( const string fName, proc_map &m );
 int main( int argc, char** argv ) {
 	proc_map m;
 	list< ProcessGroup > procs;
+
 	ParseFile( "infile.txt", m );
 
 	// Function to create and launch the ProcessGroups

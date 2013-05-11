@@ -14,9 +14,9 @@ public:
 	ProcessGroup()	{ }
 	ProcessGroup( std::list< Process > );
 	~ProcessGroup()	{ }
-	
 	void LaunchProcessGroup();
 	void AddProcess();
+
 private:
 	std::list< Process > _lst;
 };

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProcessLauncher", "ProcessLauncher\ProcessLauncher.vcxproj", "{5A903CDA-78AD-4192-9FC0-86A533DE2235}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProcessLauncher.Test", "ProcessLauncher.Test\ProcessLauncher.Test.vcxproj", "{3929696A-7E07-4896-B2B5-E130EF040396}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{5A903CDA-78AD-4192-9FC0-86A533DE2235}.Debug|Win32.Build.0 = Debug|Win32
 		{5A903CDA-78AD-4192-9FC0-86A533DE2235}.Release|Win32.ActiveCfg = Release|Win32
 		{5A903CDA-78AD-4192-9FC0-86A533DE2235}.Release|Win32.Build.0 = Release|Win32
+		{3929696A-7E07-4896-B2B5-E130EF040396}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3929696A-7E07-4896-B2B5-E130EF040396}.Debug|Win32.Build.0 = Debug|Win32
+		{3929696A-7E07-4896-B2B5-E130EF040396}.Release|Win32.ActiveCfg = Release|Win32
+		{3929696A-7E07-4896-B2B5-E130EF040396}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

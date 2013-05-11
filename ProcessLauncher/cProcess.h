@@ -19,6 +19,7 @@ public:
 private:
 	std::string _cmd;
 	std::string _cmdLine;
+	int _args;
 };
 
 #endif
