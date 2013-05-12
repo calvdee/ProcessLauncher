@@ -20,7 +20,26 @@ typedef pair< string, list<Process> > proc_pair;
 void ParseFile( const string fName, proc_map &m );
 //void PrintReports( list< ProcessGroup > procs );
 
+
+void RunProcess() {
+	wstring wCmd;
+	string path;
+
+	path = "c:\\windows\\system32\\cmd.exe";
+	wCmd = wstring( path.begin(), path.end() );
+	Process p( wCmd, L"" );
+
+	p.RunProcess();
+}
+
+
 int main( int argc, char** argv ) {
+	RunProcess();
+
+
+
+
+
 	proc_map m;
 	list< ProcessGroup > procs;
 
@@ -42,19 +61,25 @@ int main( int argc, char** argv ) {
 	return 0;
 }
 
+
+
 void ParseFile( const string fName, proc_map &m ) {
 	ifstream in( fName );
 
 	assert( in.is_open() );
 
 	string grp, cmd, cmdLine;
+	wstring wCmd, wCmdLine;
 
 	while( !in.eof() ) {
 		getline( in, grp, ',' );
 		getline( in, cmd, ',' );
 		getline( in, cmdLine, '\n' );
 
-		m[ grp ].push_back( Process(cmd, cmdLine) );
+		wCmd = wstring( cmd.begin(), cmd.end() );
+		wCmdLine = wstring( cmd.begin(), cmd.end() );
+
+		m[ grp ].push_back( Process( wCmd, wCmdLine ) );
 	};
 
 	in.close();

@@ -7,11 +7,11 @@
   @param args
   The string containing command line arguments
  */
-int count_args( std::string args ) {
+int count_args( std::wstring args ) {
 	int i = 0;
-	std::string arg;
-	std::istringstream iss( args );
-
+	std::wstring arg;
+	std::wistringstream iss( args );
+	
 	while( iss >> arg ) { ++i; };
 
 	return i;

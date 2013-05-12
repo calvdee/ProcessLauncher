@@ -1,4 +1,3 @@
-#include <Windows.h>
 #include <string>
 #include "Common.h"
 #include "cProcess.h"
@@ -13,10 +12,20 @@
   @param cmdLine
   The command line arguments passed when creating a new process.
  */
-Process::Process( std::string cmd, std::string cmdLine ){
+Process::Process( std::wstring cmd, std::wstring cmdLine ){
 	this->_cmd = cmd;
 	this->_cmdLine = cmdLine;
 	this->_args = count_args( cmd );
+	this->_hProc = NULL;
+	this->_hThread = NULL;
+}
+
+/**
+   Closes the thread and process handles.
+ */
+Process::~Process() {
+	CloseHandle( this->_hProc );
+	CloseHandle( this-> _hThread );
 }
 
 /**
@@ -24,7 +33,7 @@ Process::Process( std::string cmd, std::string cmdLine ){
  
   @return the module name for the process.
  */
-std::string Process::GetCommandLine() {
+std::wstring Process::GetCommandLine() {
 	return _cmdLine;
 }
 
@@ -33,16 +42,35 @@ std::string Process::GetCommandLine() {
  
   @return the module name for the process.
  */
-std::string Process::GetCommand() {
+std::wstring Process::GetCommand() {
 	return _cmd;
 }
 
-void Process::RunProcess() {
-	std::wstring cmdLine = L"";	// Command line for the new process
-	STARTUPINFO si;				// Pointer to a STARTUPINFO struct ...
-    PROCESS_INFORMATION pi;		// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
-	LPCWSTR imgName = LPCWSTR( _cmd.c_str() );	// The process to run
-	LPWSTR proc_args = LPWSTR( (char)_args );	// The number of arguments
+/**
+  Returns the handle to the process.
+
+  @return the process's handle if the process has been created, 
+  otherwise null.
+ */
+HANDLE Process::GetProcessHandle() {
+	return this->_hProc;
+}
+
+/**
+  Returns the handle to the process's thread.
+
+  @return a handle to the process's thread if the process has been created,
+  otherwise null.
+ */
+HANDLE Process::GetThreadHandle() {
+	return this->_hThread;
+}
+
+int Process::RunProcess() {
+	STARTUPINFO si;					// Pointer to a STARTUPINFO struct ...
+    PROCESS_INFORMATION pi;			// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
+	LPCWSTR imgName = _cmd.c_str();	// The process to run
+	LPWSTR cmdLine = const_cast< LPWSTR >(_cmdLine.c_str());	// Command line for the new process
 
     ZeroMemory( &si, sizeof(si) );
     si.cb = sizeof(si);
@@ -50,7 +78,7 @@ void Process::RunProcess() {
 	
 	BOOL proc = CreateProcess( 
 		imgName,			// LPCWSTR pszImageName, 
-		proc_args,			// LPWSTR pszCmdLine, 
+		cmdLine,			// LPWSTR pszCmdLine, 
 		NULL,				// LPSECURITY_ATTRIBUTES psaProcess, 
 		NULL,				// LPSECURITY_ATTRIBUTES psaThread, 
 		FALSE,				// BOOL fInheritHandles, 
@@ -61,11 +89,12 @@ void Process::RunProcess() {
 		&pi 				// PROCESS_INFORMATION psiStartInfo
 	); 
 
-	unsigned long ret = WaitForSingleObject( pi.hProcess, INFINITE );
+	// TODO: Handle the error condition
+	if( !proc )
+		return -1;
 
-	if( ret == WAIT_OBJECT_0)
-		;	// TODO: Something
+	_hProc = pi.hProcess;
+	_hThread = pi.hThread;
 
-	CloseHandle( pi.hProcess );
-    CloseHandle( pi.hThread );
+	return 0;
 }

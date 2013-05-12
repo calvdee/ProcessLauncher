@@ -3,6 +3,6 @@
 
 #include <string>
 
-int count_args( std::string args );
+int count_args( std::wstring args );
 
 #endif

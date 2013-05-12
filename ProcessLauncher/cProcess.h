@@ -6,20 +6,25 @@
 #define _C_PROCESS_
 
 #include <string>
+#include <Windows.h>
 
 class Process {
 
 public:
-	Process( std::string cmd, std::string cmdLine );
-	~Process()	{ }
-	std::string GetCommandLine();
-	std::string GetCommand();
-	void RunProcess();
+	Process( std::wstring cmd, std::wstring cmdLine );
+	~Process();
+	std::wstring GetCommandLine();
+	std::wstring GetCommand();
+	int RunProcess();
+	HANDLE GetProcessHandle();
+	HANDLE GetThreadHandle();
 
 private:
-	std::string _cmd;
-	std::string _cmdLine;
+	std::wstring _cmd;
+	std::wstring _cmdLine;
 	int _args;
+	HANDLE _hProc;
+	HANDLE _hThread;
 };
 
 #endif
