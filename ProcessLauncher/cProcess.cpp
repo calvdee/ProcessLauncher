@@ -25,7 +25,7 @@ Process::Process( std::wstring cmd, std::wstring cmdLine ){
  */
 Process::~Process() {
 	CloseHandle( this->_hProc );
-	CloseHandle( this-> _hThread );
+	CloseHandle( this->_hThread );
 }
 
 /**
@@ -70,7 +70,7 @@ int Process::RunProcess() {
 	STARTUPINFO si;					// Pointer to a STARTUPINFO struct ...
     PROCESS_INFORMATION pi;			// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
 	LPCWSTR imgName = _cmd.c_str();	// The process to run
-	LPWSTR cmdLine = const_cast< LPWSTR >(_cmdLine.c_str());	// Command line for the new process
+	LPWSTR cmdLine = const_cast< LPWSTR >( _cmdLine.c_str() );	// Command line for the new process
 
     ZeroMemory( &si, sizeof(si) );
     si.cb = sizeof(si);
