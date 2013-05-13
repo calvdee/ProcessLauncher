@@ -12,13 +12,12 @@ class ProcessGroup {
 
 public:
 	ProcessGroup()	{ }
-	ProcessGroup( std::list< Process > );
+	ProcessGroup( std::list< Process::proc_ptr > );
 	~ProcessGroup()	{ }
 	void LaunchProcessGroup();
-	void AddProcess();
 
 private:
-	std::list< Process > _lst;
+	std::list< Process::proc_ptr > _lst;
 };
 
 #endif

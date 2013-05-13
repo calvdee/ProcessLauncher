@@ -3,7 +3,7 @@
 /**
   Creates an empty ProcessGroup object.
  */
-ProcessGroup::ProcessGroup( std::list< Process > grp ) {
+ProcessGroup::ProcessGroup( std::list< Process::proc_ptr > grp ) {
 	this->_lst = grp;
 }
 
@@ -14,8 +14,4 @@ ProcessGroup::ProcessGroup( std::list< Process > grp ) {
  */
 void ProcessGroup::LaunchProcessGroup() {
 
-}
-
-
-void AddProcess() {
 }
