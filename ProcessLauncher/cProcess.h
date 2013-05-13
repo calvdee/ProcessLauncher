@@ -9,14 +9,14 @@
 #include <memory>
 #include <map>
 #include <Windows.h>
-
+#include <list>
 
 class Process {
 
 public:
 	typedef std::shared_ptr< Process > proc_ptr;
-	typedef std::map< std::string, std::list<Process> > proc_map;
-	typedef std::pair< std::string, std::list<Process> > proc_pair;
+	typedef std::map< std::string, std::list<Process::proc_ptr> > proc_map;
+	typedef std::pair< std::string, std::list<Process::proc_ptr> > proc_pair;
 
 	Process( std::wstring cmd, std::wstring cmdLine );
 	~Process();

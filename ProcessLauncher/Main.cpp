@@ -18,6 +18,7 @@ using namespace std;
 //typedef pair< string, list<Process> > proc_pair;
 
 void ParseFile( const string fName, Process::proc_map &m );
+void Run( Process::proc_pair p, list< ProcessGroup > &lst );
 //void PrintReports( list< ProcessGroup > procs );
 
 int main( int argc, char** argv ) {
@@ -26,27 +27,30 @@ int main( int argc, char** argv ) {
 
 	ParseFile( "infile.txt", m );
 
-	// Function to create and launch the ProcessGroups using the 
-	// lists of processes.
-	auto fnRun = [ &procs ]( Process::proc_pair p ) {
-		ProcessGroup grp( p.second );
-		grp.LaunchProcessGroup();
-		procs.push_back( grp );
-	};
+	// Wrapper for ``Run`` function
+	auto fn = [&procs]( Process::proc_pair p ){ Run( p, procs ); };
 
-	// Create and run the ProcessGroups
-	for_each( m.begin(), m.end(), fnRun );
+	for_each( m.begin(), m.end(), fn );
 
 	// Print the reports
 	//PrintReports( procs );
-
 	return 0;
 }
 
 
+/**
+	Parse the input file formatted:
+	<LaunchGroup>,<Command>,<arg0>, ... , <argN>
 
-void ParseFile( const string fName, Process::proc_map &m ) {
-	ifstream in( fName );
+	@param fPath
+	The path to the input file.
+
+	@param m
+	A reference to a process map with key of process group identifer
+	and value is a list of Processes associated with the group.
+  */
+void ParseFile( const string fPath, Process::proc_map &m ) {
+	ifstream in( fPath );
 
 	assert( in.is_open() );
 
@@ -61,8 +65,30 @@ void ParseFile( const string fName, Process::proc_map &m ) {
 		wCmd = wstring( cmd.begin(), cmd.end() );
 		wCmdLine = wstring( cmd.begin(), cmd.end() );
 
-		m[ grp ].push_back( Process( wCmd, wCmdLine ) );
+		m[ grp ].push_back( Process::proc_ptr( new Process(wCmd, wCmdLine) ) );
 	};
 
 	in.close();
+}
+
+/**
+	Create ``ProcessGroup`` from list of Processes and Launch them.  Then
+	add the process to the list.
+
+	@param p
+	The <GroupIdentifier><ListOfProcesses> data structure from which we
+	create the ProcessGroup.
+
+	@param lst
+	A reference to a list in which the created and running or finished process
+	is added to.
+  */
+void Run( Process::proc_pair p, list< ProcessGroup > &lst )
+{
+		// Create the ``ProcessGroup`` and start it up
+		ProcessGroup grp( p.second );
+		grp.LaunchProcessGroup();
+
+		// Add to the container
+		lst.push_back( grp );
 }
