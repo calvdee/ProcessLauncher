@@ -13,10 +13,6 @@
 
 using namespace std;
 
-//typedef shared_ptr< Process > proc_ptr;
-//typedef map< string, list<Process> > proc_map;
-//typedef pair< string, list<Process> > proc_pair;
-
 void ParseFile( const string fName, Process::proc_map &m );
 void Run( Process::proc_pair p, list< ProcessGroup > &lst );
 //void PrintReports( list< ProcessGroup > procs );

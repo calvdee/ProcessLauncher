@@ -1,4 +1,5 @@
 #include "cProcessGroup.h"
+#include <iterator>
 
 /**
   Creates an empty ProcessGroup object.
@@ -20,19 +21,22 @@ void ProcessGroup::LaunchProcessGroup() {
 	// TODO: Iterate over list of ``Process`` objects and launch them then
 	//       wait for their created handles using `GetHandle` method.
 
-	// for each process:
-		// 1. Launch
+	std::list< Process::proc_ptr >::iterator it = _lst.begin();
+	for( ; it != _lst.end(); ++it )
+	{
+		// Launch the process
+		it->get()->RunProcess();
 
 		// 2. GetProcess()
+	}
 
-		// 3. Block until the handles are signaled.
-		DWORD ret = WaitForMultipleObjects(
-		  nCount,		// _In_  DWORD nCount
-		  lpHandles,	// _In_  const HANDLE *lpHandles
-		  true,			// _In_  BOOL bWaitAll
-		  0				// _In_  DWORD dwMilliseconds
-		);
-
+	// 3. Block until the handles are signaled.
+	DWORD ret = WaitForMultipleObjects(
+		nCount,		// _In_  DWORD nCount
+		lpHandles,	// _In_  const HANDLE *lpHandles
+		true,			// _In_  BOOL bWaitAll
+		0				// _In_  DWORD dwMilliseconds
+	);
 
 }
 
