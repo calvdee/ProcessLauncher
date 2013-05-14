@@ -41,6 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\Calvin\Documents\Visual Studio 2012\Projects\ProcessLauncher\ProcessLauncher;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -78,13 +79,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Common.cpp" />
+    <ClCompile Include="ProcessLauncherCommon.cpp" />
     <ClCompile Include="cProcessGroup.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="cProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h" />
+    <ClInclude Include="ProcessLauncherCommon.h" />
     <ClInclude Include="cProcess.h" />
     <ClInclude Include="cProcessGroup.h" />
   </ItemGroup>

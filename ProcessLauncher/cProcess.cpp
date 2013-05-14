@@ -1,5 +1,5 @@
 #include <string>
-#include "Common.h"
+#include "ProcessLauncherCommon.h"
 #include "cProcess.h"
 
 
@@ -67,31 +67,36 @@ HANDLE Process::GetThreadHandle() {
 }
 
 int Process::RunProcess() {
-	STARTUPINFO si;					// Pointer to a STARTUPINFO struct ...
-    PROCESS_INFORMATION pi;			// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
+	STARTUPINFO si = { 0 };			// Pointer to a STARTUPINFO struct ...
+	PROCESS_INFORMATION pi = { 0 };	// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
 	LPCWSTR imgName = _cmd.c_str();	// The process to run
-	LPWSTR cmdLine = const_cast< LPWSTR >( _cmdLine.c_str() );	// Command line for the new process
 
-    ZeroMemory( &si, sizeof(si) );
-    si.cb = sizeof(si);
-    ZeroMemory( &pi, sizeof(pi) );
+	// TODO: add quotes in case of spaces
+	LPWSTR cmdLine = const_cast< LPWSTR >( _cmdLine.c_str() );	// Command line for the new process 
+
+    si.cb = sizeof(STARTUPINFO);
 	
-	BOOL proc = CreateProcess( 
-		imgName,			// LPCWSTR pszImageName, 
-		cmdLine,			// LPWSTR pszCmdLine, 
-		NULL,				// LPSECURITY_ATTRIBUTES psaProcess, 
-		NULL,				// LPSECURITY_ATTRIBUTES psaThread, 
-		FALSE,				// BOOL fInheritHandles, 
-		CREATE_NEW_CONSOLE, // DWORD fdwCreate, 
-		NULL,				// LPVOID pvEnvironment, 
-		NULL,				// LPWSTR pszCurDir, 
-		&si,				// LPSTARTUPINFOW psiStartInfo, 
-		&pi 				// PROCESS_INFORMATION psiStartInfo
-	); 
+	BOOL success;
+	try {
+		success = CreateProcess( imgName,	// LPCWSTR pszImageName, 
+			cmdLine,			// LPWSTR pszCmdLine, 
+			NULL,				// LPSECURITY_ATTRIBUTES psaProcess, 
+			NULL,				// LPSECURITY_ATTRIBUTES psaThread, 
+			FALSE,				// BOOL fInheritHandles, 
+			CREATE_NEW_CONSOLE, // DWORD fdwCreate, 
+			NULL,				// LPVOID pvEnvironment, 
+			NULL,				// LPWSTR pszCurDir, 
+			&si,				// LPSTARTUPINFOW psiStartInfo, 
+			&pi 				// PROCESS_INFORMATION psiStartInfo
+		); 
+	}
+	catch( std::bad_alloc ) {
+		return -1;
+	}
 
 	// TODO: Handle the error condition
-	if( !proc )
-		return -1;
+	if( !success )
+		return GetLastError();
 
 	_hProc = pi.hProcess;
 	_hThread = pi.hThread;

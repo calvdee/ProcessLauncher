@@ -9,7 +9,7 @@
 #include <sstream>
 #include "cProcess.h"
 #include "cProcessGroup.h"
-#include "Common.h"
+#include "ProcessLauncherCommon.h"
 
 using namespace std;
 
@@ -61,7 +61,8 @@ void ParseFile( const string fPath, Process::proc_map &m ) {
 		wCmd = wstring( cmd.begin(), cmd.end() );
 		wCmdLine = wstring( cmd.begin(), cmd.end() );
 
-		m[ grp ].push_back( Process::proc_ptr( new Process(wCmd, wCmdLine) ) );
+		//m[ grp ].push_back( Process::proc_ptr( new Process(wCmd, wCmdLine) ) );
+		m[ grp ].push_back( make_shared< Process >( wCmd, wCmdLine ) );
 	};
 
 	in.close();

@@ -24,7 +24,7 @@
     <ClCompile Include="cProcessGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Common.cpp">
+    <ClCompile Include="ProcessLauncherCommon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="cProcessGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common.h">
+    <ClInclude Include="ProcessLauncherCommon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
