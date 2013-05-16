@@ -94,7 +94,8 @@ int Process::RunProcess() {
 		return -1;
 	}
 
-	// TODO: Handle the error condition
+	// Return the error code
+
 	if( !success )
 		return GetLastError();
 

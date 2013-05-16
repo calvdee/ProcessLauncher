@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include <string>
 #include "stdafx.h"
 #include "CppUnitTest.h"
@@ -8,7 +9,7 @@ using namespace std;
 
 namespace TestProcessLauncher
 {		
-	TEST_CLASS( ProcessTest )
+	TEST_CLASS( AppTest )
 	{
 	public:
 		
@@ -22,6 +23,12 @@ namespace TestProcessLauncher
 			Assert::AreEqual( 0, p->RunProcess() );
 			Assert::AreNotEqual< HANDLE >( NULL, p->GetProcessHandle() );
 			Assert::AreNotEqual< HANDLE >( NULL, p->GetThreadHandle() );
+
+			// Terminate the process
+			DWORD exitCode = 0;
+			BOOL term = TerminateProcess( p->GetProcessHandle(), exitCode );
+			
+			Assert::IsTrue( term );
 		}
 
 	};
