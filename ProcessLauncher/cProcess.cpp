@@ -1,5 +1,5 @@
 #include <string>
-#include "ProcessLauncherCommon.h"
+#include <sstream>
 #include "cProcess.h"
 
 
@@ -103,4 +103,20 @@ int Process::RunProcess() {
 	_hThread = pi.hThread;
 
 	return 0;
+}
+
+/**
+  Counts the arguments
+
+  @param args
+  The string containing command line arguments
+ */
+int Process::count_args( std::wstring args ) {
+	int i = 0;
+	std::wstring arg;
+	std::wistringstream iss( args );
+	
+	while( iss >> arg ) { ++i; };
+
+	return i;
 }

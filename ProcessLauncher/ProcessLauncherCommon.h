@@ -2,7 +2,10 @@
 #define _COMMON_H_
 
 #include <string>
+#include <list>
+#include "cProcess.h"
 
-int count_args( std::wstring args );
+void ParseFile( const std::string fName, Process::proc_map &m );
+void Run( Process::proc_pair p, std::list< ProcessGroup > &lst );
 
 #endif

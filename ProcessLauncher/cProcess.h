@@ -30,8 +30,10 @@ private:
 	std::wstring _cmd;
 	std::wstring _cmdLine;
 	int _args;
+	int count_args( std::wstring args );
 	HANDLE _hProc;
 	HANDLE _hThread;
+
 };
 
 #endif
