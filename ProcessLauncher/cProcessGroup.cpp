@@ -20,17 +20,14 @@ void ProcessGroup::LaunchProcessGroup() {
 
 	// TODO: Iterate over list of ``Process`` objects and launch them then
 	//       wait for their created handles using `GetHandle` method.
-
+	//			- Better way to allocate for handles?
 	std::list< Process::proc_ptr >::iterator it = _lst.begin();
-
-	for( ; it != _lst.end(); ++it )
-	{
+	for( ; it != _lst.end(); ++it ) {
 		// Launch the process
 		if( it->get()->RunProcess() != 0) {
 			// TODO: Print to std err.
 		}
 
-		// 2. GetProcess()
 		lpHandles[ ++idx ] = it->get()->GetProcessHandle();
 	}
 
