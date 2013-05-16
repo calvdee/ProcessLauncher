@@ -1,3 +1,1 @@
-1,app.exe,arg1 arg2 arg3
-2,app 1.exe,arg1,arg2
-3,app3.exe,
+1,c:/windows/system32/notepad.exe,
