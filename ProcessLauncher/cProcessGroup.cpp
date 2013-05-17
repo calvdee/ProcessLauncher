@@ -1,5 +1,6 @@
 #include "cProcessGroup.h"
 #include <iterator>
+#include <vector>
 
 /**
   Creates an empty ProcessGroup object.
@@ -15,27 +16,24 @@ ProcessGroup::ProcessGroup( std::list< Process::proc_ptr > grp ) {
  */
 void ProcessGroup::LaunchProcessGroup() {
 	DWORD nCount = _lst.size();
-	HANDLE lpHandles[256] = { 0 };
-	int idx = -1;
+	std::vector< HANDLE > vRunning;
 
-	// TODO: Iterate over list of ``Process`` objects and launch them then
-	//       wait for their created handles using `GetHandle` method.
-	//			- Better way to allocate for handles?
 	std::list< Process::proc_ptr >::iterator it = _lst.begin();
 	for( ; it != _lst.end(); ++it ) {
 		// Launch the process
+
 		if( it->get()->RunProcess() != 0) {
 			// TODO: Print to std err.
 		}
 
-		lpHandles[ ++idx ] = it->get()->GetProcessHandle();
+		vRunning.push_back( it->get()->GetProcessHandle() );
 	}
 
-	// 3. Block until the handles are signaled.
-	DWORD ret = WaitForMultipleObjects(nCount,// _In_  DWORD nCount
-		lpHandles,	// _In_  const HANDLE *lpHandles
-		true,		// _In_  BOOL bWaitAll
-		INFINITE	// _In_  DWORD dwMilliseconds
+	// Block until all handles have signaled completion.
+	DWORD ret = WaitForMultipleObjects( nCount,	// _In_  DWORD nCount
+		vRunning.data(),	// _In_  const HANDLE *lpHandles
+		true,				// _In_  BOOL bWaitAll
+		INFINITE			// _In_  DWORD dwMilliseconds
 	);
 
 }

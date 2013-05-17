@@ -1,8 +1,9 @@
 #include <Windows.h>
 #include <string>
+#include <list>
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "cProcess.h"
+#include "cProcessGroup.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -29,6 +30,18 @@ namespace TestProcessLauncher
 			BOOL term = TerminateProcess( p->GetProcessHandle(), exitCode );
 			
 			Assert::IsTrue( term );
+		}
+
+		TEST_METHOD( TestRunProcessGroup )
+		{
+			list< Process::proc_ptr >  procList;
+			
+			procList.push_back( make_shared< Process >( L"c:/windows/system32/notepad.exe", L"" ) );
+			procList.push_back( make_shared< Process >( L"c:/python27/python.exe", L"" ) );
+
+			ProcessGroup procGroup( procList );
+
+			procGroup.LaunchProcessGroup();
 		}
 
 	};
