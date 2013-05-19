@@ -1,17 +1,23 @@
 #include <iostream>
 #include <algorithm>
 #include "ProcessLauncherCommon.h"
+#include "cLaunchReport.h"
 
 using namespace std;
 
-int main( int argc, char** argv ) {
-	Process::proc_map m;
-	list< ProcessGroup > procs;
+int main( int argc, char **argv ) {
+	Process::group m;
+	vector< LaunchReport > reports;
 
-	ParseFile( "infile.txt", m );
+	if( argc < 2 || argc > 2 ) {
+		cout << "Error: Wrong number of arguments, exiting." << endl;
+		return -1;
+	}
+
+	ParseFile( argv[1] , m );
 
 	// Wrapper for ``Run`` function
-	auto fn = [&procs]( Process::proc_pair p ){ Run( p, procs ); };
+	auto fn = [ &reports ]( Process::group_pair p ){ Run( p, reports ); };
 
 	for_each( m.begin(), m.end(), fn );
 

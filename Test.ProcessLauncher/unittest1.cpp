@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "cProcessGroup.h"
+#include "cLaunchReport.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -23,7 +24,6 @@ namespace TestProcessLauncher
 			// Process should start up okay and have handles
 			Assert::AreEqual( 0, p->RunProcess() );
 			Assert::AreNotEqual< HANDLE >( NULL, p->GetProcessHandle() );
-			Assert::AreNotEqual< HANDLE >( NULL, p->GetThreadHandle() );
 
 			// Terminate the process
 			DWORD exitCode = 0;
@@ -34,14 +34,16 @@ namespace TestProcessLauncher
 
 		TEST_METHOD( TestRunProcessGroup )
 		{
-			list< Process::proc_ptr >  procList;
+			vector< Process::proc_ptr >  procs;
 			
-			procList.push_back( make_shared< Process >( L"c:/windows/system32/notepad.exe", L"" ) );
-			procList.push_back( make_shared< Process >( L"c:/python27/python.exe", L"" ) );
+			procs.push_back( make_shared< Process >( L"c:/windows/system32/notepad.exe", L"" ) );
+			procs.push_back( make_shared< Process >( L"c:/python27/python.exe", L"" ) );
 
-			ProcessGroup procGroup( procList );
+			ProcessGroup procGroup( 1, procs );
 
-			procGroup.LaunchProcessGroup();
+			vector< LaunchReport> reports = procGroup.LaunchProcessGroup();
+
+			// For each 
 		}
 
 	};

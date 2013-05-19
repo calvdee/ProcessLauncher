@@ -5,19 +5,22 @@
 #ifndef _C_PROCESS_GROUP_
 #define _C_PROCESS_GROUP_
 
-#include <list>
 #include "cProcess.h"
+#include "cLaunchReport.h"
 
 class ProcessGroup {
 
 public:
-	ProcessGroup()	{ }
-	ProcessGroup( std::list< Process::proc_ptr > );
+	ProcessGroup( int id, std::vector<Process::proc_ptr> procs )
+		: _id( id ), _procs( procs ) { }
 	~ProcessGroup()	{ }
-	void LaunchProcessGroup();
+	std::vector< LaunchReport > LaunchProcessGroup();
 
 private:
-	std::list< Process::proc_ptr > _lst;
+	int _id;
+	std::vector< Process::proc_ptr > _procs;
+	std::vector< std::wstring > _errors;
+	void build_reports( std::vector<HANDLE>& handles, std::vector<LaunchReport>& reports );
 };
 
 #endif

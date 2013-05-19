@@ -3,38 +3,63 @@
 #include <vector>
 
 /**
-  Creates an empty ProcessGroup object.
+	Launches the ProcessGroup concurrently and blocks until all
+	processes in the group return.
+
+	@return a report object with ProcessGroup launch data.
  */
-ProcessGroup::ProcessGroup( std::list< Process::proc_ptr > grp ) {
-	this->_lst = grp;
-}
+std::vector< LaunchReport > ProcessGroup::LaunchProcessGroup() {
+	std::vector< HANDLE > running;
+	std::vector< LaunchReport > reports;
 
+	std::vector< Process::proc_ptr >::iterator it = _procs.begin();
+	std::wstring cmd, args;
+	int result = 0;
 
-/**
-  Launches the ProcessGroup concurrently and blocks until alll
-  processes in the group return.
- */
-void ProcessGroup::LaunchProcessGroup() {
-	DWORD nCount = _lst.size();
-	std::vector< HANDLE > vRunning;
-
-	std::list< Process::proc_ptr >::iterator it = _lst.begin();
-	for( ; it != _lst.end(); ++it ) {
+	for( ; it != _procs.end(); ++it ) {
 		// Launch the process
+		result = it->get()->RunProcess();
+		cmd = it->get()->GetCommand();
+		args = it->get()->GetCommandArgs();
 
-		if( it->get()->RunProcess() != 0) {
-			// TODO: Print to std err.
+		if( result != 0) {
+			// TODO: What to do with programs that didn't even launch?
+
+			_errors.push_back( cmd );
+			continue;
 		}
 
-		vRunning.push_back( it->get()->GetProcessHandle() );
+		reports.push_back( LaunchReport( _id, result, cmd, args ) );
+		running.push_back( it->get()->GetProcessHandle() );
 	}
 
 	// Block until all handles have signaled completion.
-	DWORD ret = WaitForMultipleObjects( nCount,	// _In_  DWORD nCount
-		vRunning.data(),	// _In_  const HANDLE *lpHandles
-		true,				// _In_  BOOL bWaitAll
-		INFINITE			// _In_  DWORD dwMilliseconds
-	);
+	//TODO: Error condition?
+	DWORD wait = WaitForMultipleObjects( _procs.size(),
+		running.data(),
+		true,
+		INFINITE );
 
+	build_reports( running, reports );
+
+	return reports;
 }
 
+/**
+	
+ */
+void ProcessGroup::build_reports( std::vector<HANDLE>& handles, std::vector<LaunchReport>& reports ) {
+	FILETIME createTime, exitTime, kernelTime, userTime;	
+	DWORD exitCode;
+
+	// Get the exit code and process times for each handle associated
+	// with a runing process.
+	for( size_t idx = 0; idx < handles.size(); ++idx ) {
+		GetExitCodeProcess( handles[idx], &exitCode );
+		GetProcessTimes( handles[idx], &createTime, &exitTime, &kernelTime, &userTime );
+		
+		reports[ idx ].SetKernelTime( kernelTime );
+		reports[ idx ].SetUserTime( userTime );
+		reports[ idx ].SetExitCode( exitCode );
+	}
+}
