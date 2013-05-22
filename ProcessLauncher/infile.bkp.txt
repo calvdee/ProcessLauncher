@@ -1,0 +1,4 @@
+3,c:/windows/system32/notepad.exe,
+4,c:/windows/system32/notepad.exe,
+1,c:/windows/system32/notepad.exe,
+1,C:/Python27/python.exe,-v

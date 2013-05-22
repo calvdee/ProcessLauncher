@@ -23,8 +23,6 @@ std::vector< LaunchReport > ProcessGroup::LaunchProcessGroup() {
 		args = it->get()->GetCommandArgs();
 
 		if( result != 0) {
-			// TODO: What to do with programs that didn't even launch?
-
 			_errors.push_back( cmd );
 			continue;
 		}

@@ -1,5 +1,3 @@
-#include <iostream>
-#include <algorithm>
 #include "ProcessLauncherCommon.h"
 #include "cLaunchReport.h"
 
@@ -7,7 +5,7 @@ using namespace std;
 
 int main( int argc, char **argv ) {
 	Process::group m;
-	vector< LaunchReport > reports;
+	map< int, vector<LaunchReport> > reports;
 
 	if( argc < 2 || argc > 2 ) {
 		cout << "Error: Wrong number of arguments, exiting." << endl;
@@ -22,6 +20,17 @@ int main( int argc, char **argv ) {
 	for_each( m.begin(), m.end(), fn );
 
 	// Print the reports
+	cout << "Launch Times" << endl;
+
+	// Iterate over the ProcessGroups and display the ID
+	for( auto it = reports.begin(); it != reports.end(); ++it ) {
+		cout << endl << "G:" << it->first << endl;
+
+		// Iterate over the reports and display them.
+		for_each( it->second.begin(), it->second.end(), []( LaunchReport rep ) { wcout << rep; } );
+	}
+
+	cout << endl;
 
 	return 0;
 }

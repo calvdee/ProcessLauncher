@@ -1,9 +1,3 @@
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <assert.h>
-#include <memory>
-#include <algorithm>
 #include "cProcessGroup.h"
 #include "ProcessLauncherCommon.h"
 
@@ -37,7 +31,7 @@ void ParseFile( char* fPath, Process::group &m ) {
 		wProg = std::wstring( cmd.begin(), cmd.end() );
 		wArgs = std::wstring( cmd.begin(), cmd.end() );
 
-		m[ atoi( (char*)(&group) ) ].push_back( std::make_shared< Process >( wProg, wArgs ) );
+		m[ atoi( (char*)(&group) ) ].push_back( std::make_shared<Process>( wProg, wArgs ) );
 	};
 
 	in.close();
@@ -55,14 +49,33 @@ void ParseFile( char* fPath, Process::group &m ) {
 	A reference to a list in which the created and running or finished process
 	is added to.
   */
-void Run( Process::group_pair p, std::vector< LaunchReport > &reports )
+void Run( Process::group_pair p, std::map< int, std::vector<LaunchReport> > &reports )
 {
-		// Create the ``ProcessGroup`` and start it up
-		ProcessGroup procGroup( p.first, p.second );
-		std::vector< LaunchReport > gReports = procGroup.LaunchProcessGroup();
+	// Create the `ProcessGroup` and start it up with the ID and list of processes.
+	ProcessGroup procGroup( p.first, p.second );
+	std::vector< LaunchReport > gReports = procGroup.LaunchProcessGroup();
 
-		// Add to the reports
-		std::for_each( gReports.begin(), gReports.end(), 
-			[ &reports ]( LaunchReport report ) { 
-				reports.push_back( report ); } );
+	// Add the report to the map using process group ID as the index.
+	std::for_each( gReports.begin(), gReports.end(), 
+		[ &reports, p ]( LaunchReport report ) { reports[p.first].push_back( report ); } );
+}
+
+std::wostream& operator<<( std::wostream& o, LaunchReport report ) {
+	o << L"K:" << report.GetKernelTime()	<< " "
+	  << L"U:" << report.GetUserTime()	<< " "
+	  << L"E:" << report.GetExitCode()	<< " "
+	  << L"G:" << report.GetGroupId()	<< " "
+	  << report.GetProgramName() << " "
+	  << report.GetProgramArgs() << std::endl;
+
+	return o;
+}
+
+std::wostream& operator<<( std::wostream& o, SYSTEMTIME sysTime ) {
+	o << std::setw( 2 ) << std::setfill( L'0' ) << sysTime.wHour << L":" 
+	  << std::setw( 2 ) << std::setfill( L'0' ) << sysTime.wMinute << L":" 
+	  << std::setw( 2 ) << std::setfill( L'0' ) << sysTime.wSecond << L"."
+	  << std::setw( 3 ) << std::setfill( L'0' ) << sysTime.wMilliseconds;
+
+	return o;
 }

@@ -3,10 +3,19 @@
 
 #include <string>
 #include <list>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <assert.h>
+#include <memory>
+#include <algorithm>
+#include <iomanip>
 #include "cProcess.h"
 #include "cProcessGroup.h"
 
 void ParseFile( char* fPath, Process::group &m );
-void Run( Process::group_pair p, std::vector< LaunchReport > &reports );
+void Run( Process::group_pair p, std::map< int, std::vector<LaunchReport> > &reports );
+std::wostream& operator<<( std::wostream& o, LaunchReport report );
+std::wostream& operator<<( std::wostream& o, SYSTEMTIME sysTime );
 
 #endif
