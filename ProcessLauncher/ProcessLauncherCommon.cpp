@@ -24,23 +24,20 @@ void ParseFile( char* fPath, Process::group &m ) {
 	// TODO: Handle this properly
 	assert( in.is_open() );
 
-	char* pGroup;
 	char group;
 	std::string cmd, cmdLine;
-	std::wstring wCmd, wCmdLine;
+	std::wstring wProg, wArgs;
 
 	while( !in.eof() ) {
 		group = in.get();
-		in.get(); // Discard
+		in.get(); // Discard `,`
 		getline( in, cmd, ',' );
 		getline( in, cmdLine, '\n' );
 
-		wCmd = std::wstring( cmd.begin(), cmd.end() );
-		wCmdLine = std::wstring( cmd.begin(), cmd.end() );
+		wProg = std::wstring( cmd.begin(), cmd.end() );
+		wArgs = std::wstring( cmd.begin(), cmd.end() );
 
-		//m[ grp ].push_back( Process::proc_ptr( new Process(wCmd, wCmdLine) ) );
-		pGroup = &group;
-		m[ atoi(pGroup) ].push_back( std::make_shared< Process >( wCmd, wCmdLine ) );
+		m[ atoi( (char*)(&group) ) ].push_back( std::make_shared< Process >( wProg, wArgs ) );
 	};
 
 	in.close();
@@ -65,7 +62,6 @@ void Run( Process::group_pair p, std::vector< LaunchReport > &reports )
 		std::vector< LaunchReport > gReports = procGroup.LaunchProcessGroup();
 
 		// Add to the reports
-
 		std::for_each( gReports.begin(), gReports.end(), 
 			[ &reports ]( LaunchReport report ) { 
 				reports.push_back( report ); } );

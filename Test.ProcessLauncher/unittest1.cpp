@@ -1,7 +1,8 @@
+#include "stdafx.h"
 #include <Windows.h>
 #include <string>
 #include <list>
-#include "stdafx.h"
+#include <algorithm>
 #include "CppUnitTest.h"
 #include "cProcessGroup.h"
 #include "cLaunchReport.h"
@@ -29,21 +30,35 @@ namespace TestProcessLauncher
 			DWORD exitCode = 0;
 			BOOL term = TerminateProcess( p->GetProcessHandle(), exitCode );
 			
-			Assert::IsTrue( term );
+			
 		}
 
 		TEST_METHOD( TestRunProcessGroup )
 		{
 			vector< Process::proc_ptr >  procs;
-			
+			DWORD exitCode = 0;
+
 			procs.push_back( make_shared< Process >( L"c:/windows/system32/notepad.exe", L"" ) );
 			procs.push_back( make_shared< Process >( L"c:/python27/python.exe", L"" ) );
 
+			// Process should start up okay and have handles and terminate properly
+			for( auto p = procs.begin(); p != procs.end(); ++p ) {
+				Assert::AreEqual( 0, p->get()->RunProcess() );
+				Assert::AreNotEqual< HANDLE >( NULL, p->get()->GetProcessHandle() );
+				Assert::IsTrue( TerminateProcess( p->get()->GetProcessHandle(), exitCode ) );
+				Assert::AreEqual<DWORD>( 0, exitCode );
+			}
+
 			ProcessGroup procGroup( 1, procs );
+			vector<LaunchReport> reports = procGroup.LaunchProcessGroup();
 
-			vector< LaunchReport> reports = procGroup.LaunchProcessGroup();
-
-			// For each 
+			WORD kMillis;
+			for( auto r = reports.begin(); r != reports.end(); ++r ) {
+				kMillis = r->GetKernelTime().wMilliseconds;
+				Assert::IsFalse( 0 == kMillis );
+				Assert::AreEqual( 0, r->GetExitCode() );
+				Assert::AreEqual( 1, r->GetGroupId() );
+			}
 		}
 
 	};

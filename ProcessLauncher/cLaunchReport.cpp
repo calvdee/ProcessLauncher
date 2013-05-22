@@ -33,5 +33,6 @@ void LaunchReport::SetExitCode( int code )	{ _exitCode = code; }
 SYSTEMTIME LaunchReport::GetKernelTime()	{ return _kTime; }
 SYSTEMTIME LaunchReport::GetUserTime()		{ return _uTime; }
 int LaunchReport::GetExitCode()				{ return _exitCode; }
+int LaunchReport::GetGroupId()				{ return _groupID; }
 std::wstring LaunchReport::GetProgramName()	{ return _progName; }
 std::wstring LaunchReport::GetProgramArgs()	{ return _progArgs; }	

@@ -22,6 +22,6 @@ int main( int argc, char **argv ) {
 	for_each( m.begin(), m.end(), fn );
 
 	// Print the reports
-	//PrintReports( procs );
+
 	return 0;
 }
