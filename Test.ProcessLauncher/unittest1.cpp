@@ -19,8 +19,8 @@ namespace TestProcessLauncher
 		TEST_METHOD( TestRunProcess )
 		{
 			wstring cmd = L"c:/windows/system32/notepad.exe";
-			wstring cmdLine = L"";
-			Process::proc_ptr p = make_shared< Process >( cmd, cmdLine );
+		
+			Process::proc_ptr p = make_shared< Process >( cmd, L"" );
 
 			// Process should start up okay and have handles
 			Assert::AreEqual( 0, p->RunProcess() );
@@ -29,9 +29,18 @@ namespace TestProcessLauncher
 			// Terminate the process
 			DWORD exitCode = 0;
 			BOOL term = TerminateProcess( p->GetProcessHandle(), exitCode );
-			
-			
 		}
+
+		//TEST_METHOD( TestRunProcess_WithSpace )
+		//{
+		//	wstring cmd = L"ShellError - Copy";
+		//	wstring cmdLine = L"";
+		//	Process::proc_ptr p = make_shared< Process >( cmd, cmdLine );
+
+		//	// Process should have returned error condition
+		//	Assert::AreNotEqual( 0, p->RunProcess() );
+		//	Assert::AreEqual< HANDLE >( NULL, p->GetProcessHandle() );
+		//}
 
 		TEST_METHOD( TestRunProcessGroup )
 		{
@@ -52,13 +61,9 @@ namespace TestProcessLauncher
 			ProcessGroup procGroup( 1, procs );
 			vector<LaunchReport> reports = procGroup.LaunchProcessGroup();
 
-			WORD kMillis;
-			for( auto r = reports.begin(); r != reports.end(); ++r ) {
-				kMillis = r->GetKernelTime().wMilliseconds;
-				Assert::IsFalse( 0 == kMillis );
-				Assert::AreEqual( 0, r->GetExitCode() );
-				Assert::AreEqual( 1, r->GetGroupId() );
-			}
+			// The bad process should not be in the reports
+			size_t reportCount = 2;
+			Assert::AreEqual( reportCount, reports.size() );
 		}
 
 	};

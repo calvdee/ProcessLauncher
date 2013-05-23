@@ -1,6 +1,7 @@
-#include "cProcessGroup.h"
 #include <iterator>
 #include <vector>
+#include <iostream>
+#include "cProcessGroup.h"
 
 /**
 	Launches the ProcessGroup concurrently and blocks until all
@@ -13,30 +14,31 @@ std::vector< LaunchReport > ProcessGroup::LaunchProcessGroup() {
 	std::vector< LaunchReport > reports;
 
 	std::vector< Process::proc_ptr >::iterator it = _procs.begin();
-	std::wstring cmd, args;
+	std::wstring program, args;
 	int result = 0;
 
 	for( ; it != _procs.end(); ++it ) {
 		// Launch the process
 		result = it->get()->RunProcess();
-		cmd = it->get()->GetCommand();
+		program = it->get()->GetCommand();
 		args = it->get()->GetCommandArgs();
 
 		if( result != 0) {
-			_errors.push_back( cmd );
+			_errors.push_back( program );
 			continue;
 		}
 
-		reports.push_back( LaunchReport( _id, result, cmd, args ) );
+		reports.push_back( LaunchReport( _id, result, program, args ) );
 		running.push_back( it->get()->GetProcessHandle() );
 	}
 
 	// Block until all handles have signaled completion.
 	//TODO: Error condition?
-	DWORD wait = WaitForMultipleObjects( _procs.size(),
-		running.data(),
-		true,
-		INFINITE );
+	//TODO: Make sure there is data !!
+	if( running.size() > 0 &&
+		WAIT_FAILED == WaitForMultipleObjects( _procs.size(), running.data(), TRUE, INFINITE ) ) {
+		std::cerr << "Error: Failed to wait for objects.";
+	}
 
 	build_reports( running, reports );
 
@@ -61,3 +63,5 @@ void ProcessGroup::build_reports( std::vector<HANDLE>& handles, std::vector<Laun
 		reports[ idx ].SetExitCode( exitCode );
 	}
 }
+
+std::vector< std::wstring > ProcessGroup::GetErrors() { return _errors; }

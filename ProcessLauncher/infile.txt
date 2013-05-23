@@ -1,3 +1,0 @@
-1,c:/windows/system32/notepad.exe,
-2,c:/windows/system32/notepad.exe,
-3,c:/windows/system32/notepad.exe,

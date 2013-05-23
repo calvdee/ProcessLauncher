@@ -19,17 +19,21 @@ void ParseFile( char* fPath, Process::group &m ) {
 	assert( in.is_open() );
 
 	char group;
-	std::string cmd, cmdLine;
+	std::string cmd, args;
 	std::wstring wProg, wArgs;
 
 	while( !in.eof() ) {
 		group = in.get();
+		
+		if( !in.good() )
+			continue;
+		
 		in.get(); // Discard `,`
 		getline( in, cmd, ',' );
-		getline( in, cmdLine, '\n' );
-
+		getline( in, args, '\n' );
+		
 		wProg = std::wstring( cmd.begin(), cmd.end() );
-		wArgs = std::wstring( cmd.begin(), cmd.end() );
+		wArgs = std::wstring( args.begin(), args.end() );
 
 		m[ atoi( (char*)(&group) ) ].push_back( std::make_shared<Process>( wProg, wArgs ) );
 	};

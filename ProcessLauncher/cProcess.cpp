@@ -9,12 +9,12 @@
 	@param cmd
 	The command to create the the new process.
 
-	@param cmdLine
+	@param args
 	The command line arguments passed when creating a new process.
  */
-Process::Process( std::wstring cmd, std::wstring cmdLine ){
-	this->_cmd = cmd;
-	this->_cmdArgs = cmdLine;
+Process::Process( std::wstring cmd, std::wstring args ){
+	this->_cmd = L"\"" + cmd + L"\"" ;
+	this->_cmdArgs = args;
 	this->_args = count_args( cmd );
 	this->_hProc = NULL;
 	this->_hThread = NULL;
@@ -66,17 +66,16 @@ DWORD Process::GetPID() { return this->_pid; }
 int Process::RunProcess() {
 	STARTUPINFO si = { 0 };			// Pointer to a STARTUPINFO struct ...
 	PROCESS_INFORMATION pi = { 0 };	// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
-	LPCWSTR imgName = _cmd.c_str();	// The process to run
-
-	// TODO: add quotes in case of spaces
-	LPWSTR cmdArgs = const_cast< LPWSTR >( _cmdArgs.c_str() );	// Command line for the new process 
+	std::wstring wCmdLine = _cmd + L" " + _cmdArgs;
+	LPWSTR cmdLine = const_cast<LPWSTR>( wCmdLine.c_str() );	// Command line for the new process 
 
     si.cb = sizeof(STARTUPINFO);
 	
 	BOOL success;
 	try {
-		success = CreateProcess( imgName,	// LPCWSTR pszImageName, 
-			cmdArgs,			// LPWSTR pszCmdLine, 
+		success = CreateProcess( 
+			NULL,			// LPCWSTR pszImageName, 
+			cmdLine,			// LPWSTR pszCmdLine, 
 			NULL,				// LPSECURITY_ATTRIBUTES psaProcess, 
 			NULL,				// LPSECURITY_ATTRIBUTES psaThread, 
 			FALSE,				// BOOL fInheritHandles, 

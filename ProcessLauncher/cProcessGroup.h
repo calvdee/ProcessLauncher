@@ -15,6 +15,7 @@ public:
 		: _id( id ), _procs( procs ) { }
 	~ProcessGroup()	{ }
 	std::vector< LaunchReport > LaunchProcessGroup();
+	std::vector< std::wstring > GetErrors();
 
 private:
 	int _id;
