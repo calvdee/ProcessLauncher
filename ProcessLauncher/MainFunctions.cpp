@@ -1,5 +1,5 @@
 #include "cProcessGroup.h"
-#include "ProcessLauncherCommon.h"
+#include "MainFunctions.h"
 
 /**
 	Parse the input file formatted:
@@ -8,15 +8,16 @@
 	@param fPath
 	The path to the input file.
 
-	@param m
-	A reference to a process map with key of process group identifer
-	and value is a list of Processes associated with the group.
+	@param procMap
+	A reference to a process map with key of process group ID
+	and value is a vector of Processes associated with the group.
   */
-void ParseFile( char* fPath, Process::group &m ) {
+int ParseFile( char* fPath, Process::group& procMap ) {
 	std::ifstream in( fPath );
 
 	// TODO: Handle this properly
-	assert( in.is_open() );
+	if( !in.is_open() )
+		return -1;
 
 	char group;
 	std::string cmd, args;
@@ -35,33 +36,44 @@ void ParseFile( char* fPath, Process::group &m ) {
 		wProg = std::wstring( cmd.begin(), cmd.end() );
 		wArgs = std::wstring( args.begin(), args.end() );
 
-		m[ atoi( (char*)(&group) ) ].push_back( std::make_shared<Process>( wProg, wArgs ) );
+		procMap[ atoi( (char*)(&group) ) ].push_back( std::make_shared<Process>( wProg, wArgs ) );
 	};
 
 	in.close();
+
+	return 0;
 }
 
 /**
-	Create ``ProcessGroup`` from list of Processes and Launch them.  Then
+	Create `ProcessGroup` from list of Processes and Launch them.  Then
 	add the process to the list.
 
-	@param p
-	The <GroupIdentifier><ListOfProcesses> data structure from which we
-	create the ProcessGroup.
+	@param group
+	The <GroupIdentifier><ListOfProcesses> `pair<K, V>` data structure from which
+	a ProcessGroup is created.
 
-	@param lst
-	A reference to a list in which the created and running or finished process
-	is added to.
+	@param reports
+	A map or LaunchReport objects indexed by the group ID.
+
+	@param errors
+	If a process terminated with error, it will be added to this vector.
   */
-void Run( Process::group_pair p, std::map< int, std::vector<LaunchReport> > &reports )
+void Run( Process::group_pair group, std::map< int, std::vector<LaunchReport> >& reports, std::vector<std::wstring>& errors )
 {
-	// Create the `ProcessGroup` and start it up with the ID and list of processes.
-	ProcessGroup procGroup( p.first, p.second );
+	ProcessGroup procGroup( group.first, group.second );
 	std::vector< LaunchReport > gReports = procGroup.LaunchProcessGroup();
 
-	// Add the report to the map using process group ID as the index.
-	std::for_each( gReports.begin(), gReports.end(), 
-		[ &reports, p ]( LaunchReport report ) { reports[p.first].push_back( report ); } );
+	// Add the report to the map using process group ID as the index. If the process terminated
+	// with error, add it the errors vector.
+	std::for_each( gReports.begin(), gReports.end(), [ &reports, &errors, group ]( LaunchReport report ) { 
+		// TODO: How to differentiate error codes?
+		//if(report.GetExitCode() != 0) {
+		//	errors.push_back( report.GetProgramName() );
+		//	return;
+		//}
+
+		reports[group.first].push_back( report );
+	} );
 }
 
 std::wostream& operator<<( std::wostream& o, LaunchReport report ) {
@@ -71,7 +83,6 @@ std::wostream& operator<<( std::wostream& o, LaunchReport report ) {
 	  << L"G:" << report.GetGroupId()	<< " "
 	  << report.GetProgramName() << " "
 	  << report.GetProgramArgs() << std::endl;
-
 	return o;
 }
 
@@ -80,6 +91,5 @@ std::wostream& operator<<( std::wostream& o, SYSTEMTIME sysTime ) {
 	  << std::setw( 2 ) << std::setfill( L'0' ) << sysTime.wMinute << L":" 
 	  << std::setw( 2 ) << std::setfill( L'0' ) << sysTime.wSecond << L"."
 	  << std::setw( 3 ) << std::setfill( L'0' ) << sysTime.wMilliseconds;
-
 	return o;
 }

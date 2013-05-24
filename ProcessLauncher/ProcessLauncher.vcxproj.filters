@@ -24,10 +24,10 @@
     <ClCompile Include="cProcessGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessLauncherCommon.cpp">
+    <ClCompile Include="cLaunchReport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cLaunchReport.cpp">
+    <ClCompile Include="MainFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClInclude Include="cProcessGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessLauncherCommon.h">
+    <ClInclude Include="cLaunchReport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cLaunchReport.h">
+    <ClInclude Include="MainFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

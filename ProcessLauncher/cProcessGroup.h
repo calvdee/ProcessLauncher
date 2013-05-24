@@ -14,8 +14,8 @@ public:
 	ProcessGroup( int id, std::vector<Process::proc_ptr> procs )
 		: _id( id ), _procs( procs ) { }
 	~ProcessGroup()	{ }
-	std::vector< LaunchReport > LaunchProcessGroup();
-	std::vector< std::wstring > GetErrors();
+	std::vector<LaunchReport> LaunchProcessGroup();
+	std::vector<std::wstring> GetErrors();
 
 private:
 	int _id;

@@ -64,18 +64,16 @@ DWORD Process::GetPID() { return this->_pid; }
 	code if the call failed.
 */
 int Process::RunProcess() {
-	STARTUPINFO si = { 0 };			// Pointer to a STARTUPINFO struct ...
-	PROCESS_INFORMATION pi = { 0 };	// Pointer to a PROCESS_INFORMATION struct that has handles to the new process.
+	STARTUPINFO si = { 0 };
+	PROCESS_INFORMATION pi = { 0 };
 	std::wstring wCmdLine = _cmd + L" " + _cmdArgs;
-	LPWSTR cmdLine = const_cast<LPWSTR>( wCmdLine.c_str() );	// Command line for the new process 
-
     si.cb = sizeof(STARTUPINFO);
-	
+
 	BOOL success;
 	try {
 		success = CreateProcess( 
-			NULL,			// LPCWSTR pszImageName, 
-			cmdLine,			// LPWSTR pszCmdLine, 
+			NULL,
+			const_cast<LPWSTR>( wCmdLine.c_str() ),
 			NULL,				// LPSECURITY_ATTRIBUTES psaProcess, 
 			NULL,				// LPSECURITY_ATTRIBUTES psaThread, 
 			FALSE,				// BOOL fInheritHandles, 

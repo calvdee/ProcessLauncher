@@ -80,14 +80,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cLaunchReport.cpp" />
-    <ClCompile Include="ProcessLauncherCommon.cpp" />
+    <ClCompile Include="MainFunctions.cpp" />
     <ClCompile Include="cProcessGroup.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="cProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cLaunchReport.h" />
-    <ClInclude Include="ProcessLauncherCommon.h" />
+    <ClInclude Include="MainFunctions.h" />
     <ClInclude Include="cProcess.h" />
     <ClInclude Include="cProcessGroup.h" />
   </ItemGroup>

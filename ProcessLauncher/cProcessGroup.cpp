@@ -7,7 +7,7 @@
 	Launches the ProcessGroup concurrently and blocks until all
 	processes in the group return.
 
-	@return a report object with ProcessGroup launch data.
+	@return a report object with ProcessGroup launch data
  */
 std::vector< LaunchReport > ProcessGroup::LaunchProcessGroup() {
 	std::vector< HANDLE > running;
@@ -33,14 +33,14 @@ std::vector< LaunchReport > ProcessGroup::LaunchProcessGroup() {
 	}
 
 	// Block until all handles have signaled completion.
-	//TODO: Error condition?
-	//TODO: Make sure there is data !!
+
 	if( running.size() > 0 &&
 		WAIT_FAILED == WaitForMultipleObjects( _procs.size(), running.data(), TRUE, INFINITE ) ) {
 		std::cerr << "Error: Failed to wait for objects.";
 	}
 
-	build_reports( running, reports );
+	if( running.size() > 0 )
+		build_reports( running, reports );
 
 	return reports;
 }

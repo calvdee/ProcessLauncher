@@ -14,7 +14,7 @@
 class Process {
 
 public:
-	typedef std::shared_ptr< Process > proc_ptr;
+	typedef std::shared_ptr<Process> proc_ptr;
 	typedef std::map< int, std::vector<Process::proc_ptr> > group;
 	typedef std::pair< int, std::vector<Process::proc_ptr> > group_pair;
 
