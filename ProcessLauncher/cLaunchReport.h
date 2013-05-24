@@ -1,8 +1,10 @@
 /**
-	
-
-	@author Calvin De Lima
- */
+  * @purpose A class used to encapsulate launched process report data.
+  *
+  * @author Calvin De Lima
+  * 
+  * @date May 24, 2012
+  */
 #ifndef _C_LAUNCH_REPORT_H
 #define _C_LAUNCH_REPORT_H
 

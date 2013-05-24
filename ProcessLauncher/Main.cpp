@@ -1,3 +1,12 @@
+/**
+  * @purpose Launch a set of processes.  Processes that belong to the same group will
+  *			 run concurrently.  The programs 
+  *
+  * @author Calvin De Lima
+  * 
+  * @date May 24, 2012
+  */
+
 #include "MainFunctions.h"
 #include "cLaunchReport.h"
 
@@ -13,9 +22,9 @@ int main( int argc, char **argv ) {
 		return -1;
 	}
 
-	// Parse the file and build a map of processes where the key is the group ID
-	// and the value is a vector of processes
-	if( !ParseFile( argv[1] , procGroup ) ) {
+	// Parse the file and build a map of programs where the key is the group ID
+	// and the value is a vector of programs
+	if( ParseFile( argv[1] , procGroup ) != 0) {
 		cout << "Error: Unable to open " << argv[1] << endl;
 		return -1;
 	}
@@ -38,10 +47,13 @@ int main( int argc, char **argv ) {
 
 	// Print the errors
 	if( errors.size() > 0 ) {
-		cout << "Terminated With Error:" << endl;
+		cout << "Terminated With Error:\n\n";
 		
-		for_each( errors.begin(), errors.end(), []( wstring program ) { wcout << program << endl; } );
+		int i = 0;
+		for_each( errors.begin(), errors.end(), [ &i ]( wstring program ) { wcout << ++i << ". " << program << endl; } );
 	}
+
+	cout << endl;
 
 	return 0;
 }

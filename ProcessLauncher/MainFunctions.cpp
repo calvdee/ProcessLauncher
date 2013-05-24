@@ -14,8 +14,7 @@
   */
 int ParseFile( char* fPath, Process::group& procMap ) {
 	std::ifstream in( fPath );
-
-	// TODO: Handle this properly
+	
 	if( !in.is_open() )
 		return -1;
 

@@ -62,8 +62,6 @@ void ProcessGroup::build_reports( std::vector<HANDLE>& handles, std::vector<Laun
 		reports[ idx ].SetKernelTime( kernelTime );
 		reports[ idx ].SetUserTime( userTime );
 		reports[ idx ].SetExitCode( exitCode );
-
-		// TODO: Close the handles
 	}
 }
 
