@@ -38,7 +38,7 @@ int main( int argc, char **argv ) {
 
 	// Print the errors
 	if( errors.size() > 0 ) {
-		cout << "Exited with errors:" << endl;
+		cout << "Terminated With Error:" << endl;
 		
 		for_each( errors.begin(), errors.end(), []( wstring program ) { wcout << program << endl; } );
 	}

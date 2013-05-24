@@ -1,7 +1,10 @@
 /**
-	TODO: Class description
- */
-
+  * @purpose A class used to launch and manage launch data for a set of processes.
+  *
+  * @author Calvin De Lima
+  * 
+  * @date May 24, 2012
+  */
 #ifndef _C_PROCESS_GROUP_
 #define _C_PROCESS_GROUP_
 
@@ -19,8 +22,8 @@ public:
 
 private:
 	int _id;
-	std::vector< Process::proc_ptr > _procs;
-	std::vector< std::wstring > _errors;
+	std::vector<Process::proc_ptr> _procs;
+	std::vector<std::wstring> _errors;
 	void build_reports( std::vector<HANDLE>& handles, std::vector<LaunchReport>& reports );
 };
 

@@ -2,13 +2,14 @@
 #include "cLaunchReport.h"
 
 /**
-	Sets the kernel time property for the report, converting
-	`t` to SYSTEMTIME.
-
-	@param t
-	The elapsed kernel time.
-
-	@return the kernel time as SYSTEMTIME
+  *	Sets the kernel time property for the report, converting
+  *	`t` to SYSTEMTIME.
+  *
+  *	@param t
+  *	The elapsed kernel time.
+  *
+  *	@return 
+  * the kernel time as SYSTEMTIME
 */
 SYSTEMTIME LaunchReport::SetKernelTime( FILETIME &t ) {
 	FileTimeToSystemTime( &t, &_kTime );
@@ -16,13 +17,14 @@ SYSTEMTIME LaunchReport::SetKernelTime( FILETIME &t ) {
 }
 
 /**
-	Sets the kernel time property for the report, converting
-	`t` to SYSTEMTIME.
-
-	@param t
-	The elapsed kernel time.
-
-	@return the kernel time as SYSTEMTIME
+ * Sets the kernel time property for the report, converting
+ * `t` to SYSTEMTIME.
+ * 
+ * @param t
+ * The elapsed kernel time.
+ * 
+ * @return 
+ * the kernel time as SYSTEMTIME
 */
 SYSTEMTIME LaunchReport::SetUserTime( FILETIME &t ) {
 	FileTimeToSystemTime( &t, &_uTime );

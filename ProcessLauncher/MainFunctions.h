@@ -1,3 +1,10 @@
+/**
+  * @purpose Function prototypes for main.
+  *
+  * @author Calvin De Lima
+  * 
+  * @date May 24, 2012
+  */
 #ifndef _COMMON_H_
 #define _COMMON_H_
 

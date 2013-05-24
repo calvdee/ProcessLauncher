@@ -4,14 +4,14 @@
 
 
 /**
-	Creates a new Process object.
-
-	@param cmd
-	The command to create the the new process.
-
-	@param args
-	The command line arguments passed when creating a new process.
- */
+  * Creates a new Process object.
+  *
+  * @param cmd
+  * The command to create the the new process.
+  *
+  * @param args
+  * The command line arguments passed when creating a new process.
+  */
 Process::Process( std::wstring cmd, std::wstring args ){
 	this->_cmd = L"\"" + cmd + L"\"" ;
 	this->_cmdArgs = args;
@@ -22,7 +22,7 @@ Process::Process( std::wstring cmd, std::wstring args ){
 }
 
 /**
-	Closes the thread and process handles.
+ * Closes the thread and process handles.
  */
 Process::~Process() {
 	CloseHandle( this->_hProc );
@@ -30,39 +30,44 @@ Process::~Process() {
 }
 
 /**
-	Returns the command line used to create a new process.
- 
-	@return the module name for the process.
- */
+  *	Returns the command line used to create a new process.
+  *
+  * @return 
+  * The module name for the process.
+  */
 std::wstring Process::GetCommandArgs() { return _cmdArgs; }
 
 /**
-	Returns the command used to create a new process.
- 
-	@return the module name for the process.
- */
+  * Returns the command used to create a new process.
+  *
+  * @return 
+  * The module name for the process.
+  */
 std::wstring Process::GetCommand() { return _cmd; }
 
 /**
-	Returns the handle to the process.
-
-	@return the process's handle if the process has been created, otherwise NULL.
- */
+  * Returns the handle to the process.
+  *
+  * @return 
+  * The process's handle if the process has been created, otherwise NULL.
+  */
 HANDLE Process::GetProcessHandle() { return this->_hProc; }
 
 /**
-	Returns the process ID of the process.
-
-	@return the process's PID if it was created succesfully otherwise -1.
- */
+  * Returns the process ID of the process.
+  *
+  * @return 
+  * The process's PID if it was created succesfully otherwise -1.
+  */
 DWORD Process::GetPID() { return this->_pid; }
 
 /**
-	Executes the CreateProcesss() system call to starta new process.
-
-	@return 0 if the process was created successfully or the error
-	code if the call failed.
-*/
+  * Executes the CreateProcesss() system call to starta new process.
+  *
+  *	@return 
+  * 0 if the process was created successfully or the error
+  *	code if the call failed.
+  */
 int Process::RunProcess() {
 	STARTUPINFO si = { 0 };
 	PROCESS_INFORMATION pi = { 0 };
@@ -74,14 +79,14 @@ int Process::RunProcess() {
 		success = CreateProcess( 
 			NULL,
 			const_cast<LPWSTR>( wCmdLine.c_str() ),
-			NULL,				// LPSECURITY_ATTRIBUTES psaProcess, 
-			NULL,				// LPSECURITY_ATTRIBUTES psaThread, 
-			FALSE,				// BOOL fInheritHandles, 
-			CREATE_NEW_CONSOLE, // DWORD fdwCreate, 
-			NULL,				// LPVOID pvEnvironment, 
-			NULL,				// LPWSTR pszCurDir, 
-			&si,				// LPSTARTUPINFOW psiStartInfo, 
-			&pi 				// PROCESS_INFORMATION psiStartInfo
+			NULL,				
+			NULL,				
+			FALSE,				
+			CREATE_NEW_CONSOLE, 
+			NULL,				
+			NULL,				
+			&si,				
+			&pi 				
 		); 
 	}
 	catch( std::bad_alloc ) {
@@ -101,11 +106,11 @@ int Process::RunProcess() {
 }
 
 /**
-  Counts the arguments
-
-  @param args
-  The string containing command line arguments
- */
+  * Counts the arguments
+  *
+  * @param args
+  * The string containing command line arguments
+  */
 int Process::count_args( std::wstring args ) {
 	int i = 0;
 	std::wstring arg;

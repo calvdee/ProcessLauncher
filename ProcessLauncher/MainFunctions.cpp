@@ -45,18 +45,18 @@ int ParseFile( char* fPath, Process::group& procMap ) {
 }
 
 /**
-	Create `ProcessGroup` from list of Processes and Launch them.  Then
-	add the process to the list.
-
-	@param group
-	The <GroupIdentifier><ListOfProcesses> `pair<K, V>` data structure from which
-	a ProcessGroup is created.
-
-	@param reports
-	A map or LaunchReport objects indexed by the group ID.
-
-	@param errors
-	If a process terminated with error, it will be added to this vector.
+  * Create `ProcessGroup` from list of Processes and Launch them.  Then
+  * add the process to the list.
+  * 
+  * @param group
+  * The <GroupIdentifier><ListOfProcesses> `pair<K, V>` data structure from which
+  * a ProcessGroup is created.
+  * 
+  * @param reports
+  * A map or LaunchReport objects indexed by the group ID.
+  * 
+  * @param errors
+  * If a process terminated with error, it will be added to this vector.
   */
 void Run( Process::group_pair group, std::map< int, std::vector<LaunchReport> >& reports, std::vector<std::wstring>& errors )
 {
@@ -66,11 +66,10 @@ void Run( Process::group_pair group, std::map< int, std::vector<LaunchReport> >&
 	// Add the report to the map using process group ID as the index. If the process terminated
 	// with error, add it the errors vector.
 	std::for_each( gReports.begin(), gReports.end(), [ &reports, &errors, group ]( LaunchReport report ) { 
-		// TODO: How to differentiate error codes?
-		//if(report.GetExitCode() != 0) {
-		//	errors.push_back( report.GetProgramName() );
-		//	return;
-		//}
+		if(report.GetExitCode() < 0) {
+			errors.push_back( report.GetProgramName() );
+			return;
+		}
 
 		reports[group.first].push_back( report );
 	} );

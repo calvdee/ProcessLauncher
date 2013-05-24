@@ -4,11 +4,12 @@
 #include "cProcessGroup.h"
 
 /**
-	Launches the ProcessGroup concurrently and blocks until all
-	processes in the group return.
-
-	@return a report object with ProcessGroup launch data
- */
+  * Launches the ProcessGroup concurrently and blocks until all
+  * processes in the group return.
+  *
+  * @return 
+  * A report object with ProcessGroup launch data
+  */
 std::vector< LaunchReport > ProcessGroup::LaunchProcessGroup() {
 	std::vector< HANDLE > running;
 	std::vector< LaunchReport > reports;
@@ -46,8 +47,8 @@ std::vector< LaunchReport > ProcessGroup::LaunchProcessGroup() {
 }
 
 /**
-	
- */
+  * Populates the vector of reports with report data for the processes.
+  */
 void ProcessGroup::build_reports( std::vector<HANDLE>& handles, std::vector<LaunchReport>& reports ) {
 	FILETIME createTime, exitTime, kernelTime, userTime;	
 	DWORD exitCode;
@@ -61,6 +62,8 @@ void ProcessGroup::build_reports( std::vector<HANDLE>& handles, std::vector<Laun
 		reports[ idx ].SetKernelTime( kernelTime );
 		reports[ idx ].SetUserTime( userTime );
 		reports[ idx ].SetExitCode( exitCode );
+
+		// TODO: Close the handles
 	}
 }
 

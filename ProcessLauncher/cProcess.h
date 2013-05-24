@@ -1,6 +1,10 @@
 /**
-	TODO: Class description
- */
+  * @purpose A class used to encapsulate a process and it's associated data.
+  *
+  * @author Calvin De Lima
+  * 
+  * @date May 24, 2012
+  */
 
 #ifndef _C_PROCESS_
 #define _C_PROCESS_
